@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eagle EdTech - Premier Online Tutoring</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --accent-gold: #f59e0b;
+            --accent-light: #fbbf24;
+            --light-blue: #eff6ff;
+            --dark-gray: #1f2937;
+            --medium-gray: #6b7280;
+            --light-gray: #f9fafb;
+            --success: #10b981;
+            --error: #ef4444;
+            --white: #ffffff;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        body {
+            color: var(--dark-gray);
+            line-height: 1.6;
+            background-color: var(--white);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+        
+        .logo-icon {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .logo-text span {
+            color: var(--accent-gold);
+        }
+        
+        .nav-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 28px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            padding: 8px 4px;
+            position: relative;
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-gold));
+            border-radius: 3px;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 100%;
+        }
+        
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: var(--primary-blue);
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .btn-ghost {
+            background: transparent;
+            color: var(--dark-gray);
+            border: 2px solid transparent;
+        }
+        
+        .btn-ghost:hover {
+            background: var(--light-gray);
+            color: var(--primary-blue);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--light-gray);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .user-menu:hover {
+            background: #e5e7eb;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--dark-gray);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z" fill="%230ea5e9" opacity="0.1"/></svg>');
+            opacity: 0.6;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            color: var(--medium-gray);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 60px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 32px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(229, 231, 235, 0.5);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+        
+        .stat-text {
+            font-size: 16px;
+            color: var(--medium-gray);
+            font-weight: 500;
+        }
+        
+        /* Sections */
+        .section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--dark-gray);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        
+        .section-title p {
+            font-size: 18px;
+            color: var(--medium-gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 32px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--hover-shadow);
+            border-color: var(--primary-blue);
+        }
+        
+        .service-icon-wrapper {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--light-blue), #dbeafe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: var(--primary-blue);
+            font-size: 32px;
+        }
+        
+        .service-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--dark-gray);
+        }
+        
+        .service-card p {
+            color: var(--medium-gray);
+            line-height: 1.7;
+        }
+        
+        /* Blog Section */
+        .blog {
+            background: var(--light-gray);
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+        
+        .blog-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .blog-image {
+            height: 200px;
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-gold));
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .blog-category {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: white;
+            color: var(--primary-blue);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .blog-content {
+            padding: 32px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .blog-date {
+            font-size: 14px;
+            color: var(--medium-gray);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .blog-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.4;
+            color: var(--dark-gray);
+        }
+        
+        .blog-excerpt {
+            color: var(--medium-gray);
+            line-height: 1.7;
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+        
+        .blog-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .blog-link:hover {
+            gap: 12px;
+            color: var(--primary-dark);
+        }
+        
+        .blog-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .blog-like, .blog-comment {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--medium-gray);
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .blog-like:hover {
+            color: var(--error);
+        }
+        
+        .blog-comment:hover {
+            color: var(--primary-blue);
+        }
+        
+        /* Auth Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .auth-modal {
+            background: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        .modal-overlay.active .auth-modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 32px 32px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark-gray);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--medium-gray);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            background: var(--light-gray);
+            color: var(--dark-gray);
+        }
+        
+        .modal-tabs {
+            display: flex;
+            padding: 0 32px;
+            margin-top: 24px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .modal-tab {
+            padding: 16px 0;
+            margin-right: 32px;
+            font-weight: 600;
+            color: var(--medium-gray);
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .modal-tab.active {
+            color: var(--primary-blue);
+        }
+        
+        .modal-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-gold));
+        }
+        
+        .modal-content {
+            padding: 32px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: var(--light-gray);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+        
+        .password-input {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--medium-gray);
+            cursor: pointer;
+        }
+        
+        .form-footer {
+            margin-top: 32px;
+            text-align: center;
+            color: var(--medium-gray);
+        }
+        
+        .form-footer a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 64px;
+            align-items: start;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+        
+        .contact-card {
+            background: white;
+            padding: 32px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        
+        .contact-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--light-blue), #dbeafe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: var(--primary-blue);
+            font-size: 24px;
+        }
+        
+        .benefits-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--light-gray);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-item:hover {
+            background: #e5e7eb;
+            transform: translateX(5px);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark-gray);
+            color: white;
+            padding: 80px 0 32px;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 48px;
+            margin-bottom: 60px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: white;
+        }
+        
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--primary-blue);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 1px solid #374151;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 48px;
+            }
+            
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-wrapper {
+                position: fixed;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 24px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+                z-index: 999;
+                border-radius: 0 0 20px 20px;
+            }
+            
+            .nav-wrapper.active {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                gap: 0;
+            }
+            
+            nav ul li {
+                width: 100%;
+                margin: 0;
+            }
+            
+            nav ul li a {
+                display: block;
+                padding: 16px;
+                border-radius: 10px;
+                transition: all 0.3s ease;
+            }
+            
+            nav ul li a:hover {
+                background: var(--light-gray);
+            }
+            
+            .auth-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .section {
+                padding: 64px 0;
+            }
+            
+            .section-title h2 {
+                font-size: 32px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .hero {
+                padding: 80px 0 60px;
+            }
+            
+            .service-card, .blog-card, .contact-card {
+                padding: 24px;
+            }
+            
+            .modal-content {
+                padding: 24px;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Sample blog data
+        const blogPosts = [
+            {
+                id: 1,
+                title: "5 Effective Study Techniques for Online Learning",
+                excerpt: "Discover proven study methods that maximize retention and productivity in virtual learning environments.",
+                date: "Mar 15, 2023",
+                category: "Study Tips",
+                likes: 42,
+                comments: 18,
+                readTime: "5 min read"
+            },
+            {
+                id: 2,
+                title: "The Future of Education: How Technology is Transforming Learning",
+                excerpt: "Explore the latest EdTech innovations and their impact on personalized education experiences worldwide.",
+                date: "Apr 2, 2023",
+                category: "EdTech",
+                likes: 56,
+                comments: 24,
+                readTime: "8 min read"
+            },
+            {
+                id: 3,
+                title: "Mastering Time Management for Busy Students",
+                excerpt: "Practical strategies to balance academics, extracurriculars, and personal life while maintaining high performance.",
+                date: "Apr 10, 2023",
+                category: "Productivity",
+                likes: 38,
+                comments: 15,
+                readTime: "6 min read"
+            }
+        ];
+
+        // Services data
+        const services = [
+            {
+                title: "Subject-Specific Tutoring",
+                description: "Expert guidance in mathematics, sciences, humanities, languages, and more, tailored to your curriculum.",
+                icon: "fa-book-open"
+            },
+            {
+                title: "Homework Assistance",
+                description: "Get help with daily assignments, projects, and understanding difficult concepts with step-by-step guidance.",
+                icon: "fa-home"
+            },
+            {
+                title: "Exam Preparation",
+                description: "Comprehensive test prep for standardized exams, finals, and entrance tests with practice materials.",
+                icon: "fa-clipboard-check"
+            },
+            {
+                title: "Writing & Editing Support",
+                description: "Improve your writing skills with help on essays, research papers, and proofreading from expert tutors.",
+                icon: "fa-edit"
+            },
+            {
+                title: "Academic Counseling",
+                description: "Guidance on course selection, study strategies, time management, and long-term academic planning.",
+                icon: "fa-comments"
+            },
+            {
+                title: "College Admissions",
+                description: "Personalized support for college applications, essay writing, interview preparation, and scholarship searches.",
+                icon: "fa-graduation-cap"
+            }
+        ];
+
+        function App() {
+            const [activeSection, setActiveSection] = useState('home');
+            const [isLoggedIn, setIsLoggedIn] = useState(false);
+            const [showAuthModal, setShowAuthModal] = useState(false);
+            const [authMode, setAuthMode] = useState('login');
+            const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+            const [user, setUser] = useState(null);
+            const [blogLikes, setBlogLikes] = useState({});
+            
+            // Initialize blog likes from localStorage
+            useEffect(() => {
+                const savedLikes = localStorage.getItem('eagleEdtechBlogLikes');
+                if (savedLikes) {
+                    setBlogLikes(JSON.parse(savedLikes));
+                }
+                
+                // Check if user is logged in from localStorage
+                const savedUser = localStorage.getItem('eagleEdtechUser');
+                if (savedUser) {
+                    setUser(JSON.parse(savedUser));
+                    setIsLoggedIn(true);
+                }
+            }, []);
+            
+            // Save blog likes to localStorage
+            useEffect(() => {
+                if (Object.keys(blogLikes).length > 0) {
+                    localStorage.setItem('eagleEdtechBlogLikes', JSON.stringify(blogLikes));
+                }
+            }, [blogLikes]);
+            
+            const handleNavClick = (sectionId) => {
+                setActiveSection(sectionId);
+                setMobileMenuOpen(false);
+                
+                if (sectionId === 'home') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const element = document.getElementById(sectionId);
+                    if (element) {
+                        const offset = 80;
+                        const elementPosition = element.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - offset;
+                        
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            };
+            
+            const handleLogin = (e) => {
+                e.preventDefault();
+                const email = e.target.email.value;
+                const password = e.target.password.value;
+                
+                // Simulate login
+                const mockUser = {
+                    name: "Alex Johnson",
+                    email: email,
+                    initials: "AJ"
+                };
+                
+                setUser(mockUser);
+                setIsLoggedIn(true);
+                setShowAuthModal(false);
+                localStorage.setItem('eagleEdtechUser', JSON.stringify(mockUser));
+                
+                alert(`Welcome back, ${mockUser.name}!`);
+            };
+            
+            const handleSignup = (e) => {
+                e.preventDefault();
+                const name = e.target.name.value;
+                const email = e.target.email.value;
+                const password = e.target.password.value;
+                
+                // Simulate signup
+                const mockUser = {
+                    name: name,
+                    email: email,
+                    initials: name.split(' ').map(n => n[0]).join('').toUpperCase()
+                };
+                
+                setUser(mockUser);
+                setIsLoggedIn(true);
+                setShowAuthModal(false);
+                localStorage.setItem('eagleEdtechUser', JSON.stringify(mockUser));
+                
+                alert(`Welcome to Eagle EdTech, ${name}! Your account has been created.`);
+            };
+            
+            const handleLogout = () => {
+                setIsLoggedIn(false);
+                setUser(null);
+                localStorage.removeItem('eagleEdtechUser');
+                alert("You have been logged out successfully.");
+            };
+            
+            const toggleBlogLike = (postId) => {
+                setBlogLikes(prev => ({
+                    ...prev,
+                    [postId]: !prev[postId]
+                }));
+            };
+            
+            const handleScroll = () => {
+                const sections = ['home', 'about', 'services', 'blog', 'contact'];
+                let current = 'home';
+                
+                for (const section of sections) {
+                    const element = document.getElementById(section);
+                    if (element) {
+                        const rect = element.getBoundingClientRect();
+                        if (rect.top <= 100) {
+                            current = section;
+                        }
+                    }
+                }
+                
+                setActiveSection(current);
+            };
+            
+            useEffect(() => {
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+            
+            return (
+                <div className="app">
+                    {/* Header */}
+                    <header>
+                        <div className="container header-container">
+                            <div className="logo" onClick={() => handleNavClick('home')}>
+                                <div className="logo-icon">
+                                    <i className="fas fa-graduation-cap"></i>
+                                </div>
+                                <div className="logo-text">EAGLE EDTECH</div>
+                            </div>
+                            
+                            <button 
+                                className="mobile-menu-btn"
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            >
+                                <i className={mobileMenuOpen ? "fas fa-times" : "fas fa-bars"}></i>
+                            </button>
+                            
+                            <div className={`nav-wrapper ${mobileMenuOpen ? 'active' : ''}`}>
+                                <nav>
+                                    <ul>
+                                        {['home', 'about', 'services', 'blog', 'contact'].map((item) => (
+                                            <li key={item}>
+                                                <a 
+                                                    href={`#${item}`}
+                                                    className={activeSection === item ? 'active' : ''}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        handleNavClick(item);
+                                                    }}
+                                                >
+                                                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </nav>
+                                
+                                <div className="auth-buttons">
+                                    {isLoggedIn ? (
+                                        <div className="user-menu" onClick={() => handleLogout()}>
+                                            <div className="user-avatar">{user?.initials}</div>
+                                            <span>{user?.name}</span>
+                                            <i className="fas fa-sign-out-alt"></i>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <button 
+                                                className="btn btn-ghost"
+                                                onClick={() => {
+                                                    setAuthMode('login');
+                                                    setShowAuthModal(true);
+                                                }}
+                                            >
+                                                <i className="fas fa-sign-in-alt"></i> Login
+                                            </button>
+                                            <button 
+                                                className="btn btn-primary"
+                                                onClick={() => {
+                                                    setAuthMode('signup');
+                                                    setShowAuthModal(true);
+                                                }}
+                                            >
+                                                <i className="fas fa-user-plus"></i> Sign Up
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Hero Section */}
+                    <section className="hero" id="home">
+                        <div className="container">
+                            <div className="hero-content fade-in">
+                                <h1>Empowering Students Worldwide Through Innovative Learning</h1>
+                                <p>Eagle EdTech Tutors is a premier tutoring service dedicated to empowering students worldwide through innovative and personalized learning solutions.</p>
+                                
+                                <div className="hero-buttons">
+                                    <button 
+                                        className="btn btn-primary"
+                                        onClick={() => {
+                                            if (!isLoggedIn) {
+                                                setAuthMode('signup');
+                                                setShowAuthModal(true);
+                                            } else {
+                                                handleNavClick('services');
+                                            }
+                                        }}
+                                    >
+                                        <i className="fas fa-rocket"></i> Get Started Free
+                                    </button>
+                                    <button 
+                                        className="btn btn-outline"
+                                        onClick={() => handleNavClick('contact')}
+                                    >
+                                        <i className="fas fa-calendar-alt"></i> Book a Consultation
+                                    </button>
+                                </div>
+                                
+                                <div className="stats-container">
+                                    {[
+                                        { number: "10,000+", text: "Hours of Tutoring Delivered" },
+                                        { number: "95%", text: "Satisfaction Rate" },
+                                        { number: "20+", text: "Countries Served" }
+                                    ].map((stat, index) => (
+                                        <div className="stat-card fade-in" key={index} style={{animationDelay: `${index * 0.2}s`}}>
+                                            <div className="stat-number">{stat.number}</div>
+                                            <div className="stat-text">{stat.text}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* About Section */}
+                    <section className="section" id="about">
+                        <div className="container">
+                            <div className="section-title fade-in">
+                                <h2>About Eagle EdTech</h2>
+                                <p>We are committed to providing exceptional educational support that helps students achieve their academic goals and unlock their full potential.</p>
+                            </div>
+                            
+                            <div className="services-grid">
+                                <div className="service-card fade-in">
+                                    <div className="service-icon-wrapper">
+                                        <i className="fas fa-users"></i>
+                                    </div>
+                                    <h3>Expert Tutors</h3>
+                                    <p>Our tutors are top graduates from Ivy League universities with extensive teaching experience.</p>
+                                </div>
+                                
+                                <div className="service-card fade-in" style={{animationDelay: "0.1s"}}>
+                                    <div className="service-icon-wrapper">
+                                        <i className="fas fa-laptop-code"></i>
+                                    </div>
+                                    <h3>Innovative Platform</h3>
+                                    <p>Interactive virtual classrooms with real-time collaboration tools and progress tracking.</p>
+                                </div>
+                                
+                                <div className="service-card fade-in" style={{animationDelay: "0.2s"}}>
+                                    <div className="service-icon-wrapper">
+                                        <i className="fas fa-chart-line"></i>
+                                    </div>
+                                    <h3>Proven Results</h3>
+                                    <p>Students improve their grades by an average of 2 letter grades within 3 months.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Services Section */}
+                    <section className="section services" id="services">
+                        <div className="container">
+                            <div className="section-title fade-in">
+                                <h2>Our Premium Services</h2>
+                                <p>Comprehensive tutoring solutions designed to meet every student's unique learning needs</p>
+                            </div>
+                            
+                            <div className="services-grid">
+                                {services.map((service, index) => (
+                                    <div 
+                                        className="service-card fade-in" 
+                                        key={index}
+                                        style={{animationDelay: `${index * 0.1}s`}}
+                                    >
+                                        <div className="service-icon-wrapper">
+                                            <i className={`fas ${service.icon}`}></i>
+                                        </div>
+                                        <h3>{service.title}</h3>
+                                        <p>{service.description}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Blog Section */}
+                    <section className="section blog" id="blog">
+                        <div className="container">
+                            <div className="section-title fade-in">
+                                <h2>Educational Insights & Blog</h2>
+                                <p>Stay updated with the latest learning strategies, educational trends, and study tips</p>
+                            </div>
+                            
+                            <div className="blog-grid">
+                                {blogPosts.map((post) => (
+                                    <div className="blog-card fade-in" key={post.id}>
+                                        <div className="blog-image">
+                                            <div className="blog-category">{post.category}</div>
+                                        </div>
+                                        <div className="blog-content">
+                                            <div className="blog-date">
+                                                <i className="far fa-calendar"></i> {post.date} • {post.readTime}
+                                            </div>
+                                            <h3 className="blog-title">{post.title}</h3>
+                                            <p className="blog-excerpt">{post.excerpt}</p>
+                                            <a href="#" className="blog-link">
+                                                Read More <i className="fas fa-arrow-right"></i>
+                                            </a>
+                                            <div className="blog-actions">
+                                                <div 
+                                                    className={`blog-like ${blogLikes[post.id] ? 'liked' : ''}`}
+                                                    onClick={() => toggleBlogLike(post.id)}
+                                                >
+                                                    <i className={blogLikes[post.id] ? "fas fa-heart" : "far fa-heart"}></i>
+                                                    <span>{blogLikes[post.id] ? post.likes + 1 : post.likes}</span>
+                                                </div>
+                                                <div className="blog-comment">
+                                                    <i className="far fa-comment"></i>
+                                                    <span>{post.comments}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            
+                            <div style={{textAlign: 'center', marginTop: '48px'}}>
+                                <button className="btn btn-outline">
+                                    <i className="fas fa-newspaper"></i> View All Articles
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Contact Section */}
+                    <section className="section" id="contact">
+                        <div className="container">
+                            <div className="section-title fade-in">
+                                <h2>Get In Touch</h2>
+                                <p>Ready to boost your academic performance? Contact us today for a free consultation</p>
+                            </div>
+                            
+                            <div className="contact-grid">
+                                <div className="contact-info">
+                                    <div className="contact-card fade-in">
+                                        <div className="contact-icon-wrapper">
+                                            <i className="fab fa-whatsapp"></i>
+                                        </div>
+                                        <h3>WhatsApp Support</h3>
+                                        <p>+1 786 927 4314</p>
+                                        <p>Available 24/7 for quick responses</p>
+                                        <button className="btn btn-primary" style={{marginTop: '16px'}}>
+                                            <i className="fab fa-whatsapp"></i> Message Now
+                                        </button>
+                                    </div>
+                                    
+                                    <div className="contact-card fade-in" style={{animationDelay: "0.1s"}}>
+                                        <h3 style={{marginBottom: '20px'}}>Why Choose Eagle EdTech?</h3>
+                                        <div className="benefits-list">
+                                            {[
+                                                "Late-Work Refund Guarantee",
+                                                "Discount for Returning Clients",
+                                                "Flexible Payment Models",
+                                                "24/7 Customer Support",
+                                                "Certified Expert Tutors",
+                                                "Personalized Learning Plans"
+                                            ].map((benefit, index) => (
+                                                <div className="benefit-item" key={index}>
+                                                    <i className="fas fa-check-circle" style={{color: 'var(--success)'}}></i>
+                                                    <span>{benefit}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="fade-in" style={{animationDelay: "0.2s"}}>
+                                    <div className="contact-card">
+                                        <h3 style={{marginBottom: '24px'}}>Schedule a Free Consultation</h3>
+                                        <form onSubmit={(e) => e.preventDefault()}>
+                                            <div className="form-group">
+                                                <label>Full Name</label>
+                                                <input type="text" className="form-control" placeholder="Your Name" />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Email Address</label>
+                                                <input type="email" className="form-control" placeholder="your.email@example.com" />
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Subject of Interest</label>
+                                                <select className="form-control">
+                                                    <option>Mathematics</option>
+                                                    <option>Science</option>
+                                                    <option>English/Literature</option>
+                                                    <option>Test Preparation</option>
+                                                    <option>College Admissions</option>
+                                                    <option>Other</option>
+                                                </select>
+                                            </div>
+                                            <div className="form-group">
+                                                <label>Your Message</label>
+                                                <textarea className="form-control" rows="4" placeholder="Tell us about your learning goals..."></textarea>
+                                            </div>
+                                            <button type="submit" className="btn btn-primary" style={{width: '100%'}}>
+                                                <i className="fas fa-paper-plane"></i> Send Message
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer>
+                        <div className="container">
+                            <div className="footer-grid">
+                                <div className="footer-column">
+                                    <h3>Eagle EdTech</h3>
+                                    <p style={{color: '#d1d5db', marginBottom: '20px'}}>
+                                        Premier tutoring service dedicated to empowering students worldwide through innovative and personalized learning solutions.
+                                    </p>
+                                    <div className="social-links">
+                                        {['facebook', 'twitter', 'instagram', 'linkedin'].map((platform) => (
+                                            <a href="#" className="social-link" key={platform}>
+                                                <i className={`fab fa-${platform}`}></i>
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                                
+                                <div className="footer-column">
+                                    <h3>Quick Links</h3>
+                                    <ul className="footer-links">
+                                        {['Home', 'About Us', 'Services', 'Blog', 'Contact'].map((link) => (
+                                            <li key={link}>
+                                                <a 
+                                                    href={`#${link.toLowerCase().replace(' ', '-')}`}
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        handleNavClick(link.toLowerCase().replace(' ', '-'));
+                                                    }}
+                                                >
+                                                    {link}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                
+                                <div className="footer-column">
+                                    <h3>Services</h3>
+                                    <ul className="footer-links">
+                                        {services.slice(0, 5).map((service) => (
+                                            <li key={service.title}>
+                                                <a href="#services">{service.title}</a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                
+                                <div className="footer-column">
+                                    <h3>Contact Info</h3>
+                                    <ul className="footer-links">
+                                        <li>
+                                            <a href="https://wa.me/17869274314">
+                                                <i className="fab fa-whatsapp"></i> +1 786 927 4314
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="mailto:info@eagleedtech.com">
+                                                <i className="fas fa-envelope"></i> info@eagleedtech.com
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i className="fas fa-map-marker-alt"></i> Worldwide Online Service
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div className="footer-bottom">
+                                <p>&copy; 2023 Eagle EdTech Tutors. All rights reserved.</p>
+                                <p style={{marginTop: '8px'}}>
+                                    <a href="#" style={{color: '#9ca3af', margin: '0 8px'}}>Privacy Policy</a> | 
+                                    <a href="#" style={{color: '#9ca3af', margin: '0 8px'}}>Terms of Service</a> | 
+                                    <a href="#" style={{color: '#9ca3af', margin: '0 8px'}}>Cookie Policy</a>
+                                </p>
+                            </div>
+                        </div>
+                    </footer>
+
+                    {/* Auth Modal */}
+                    {showAuthModal && (
+                        <AuthModal 
+                            mode={authMode}
+                            onClose={() => setShowAuthModal(false)}
+                            onLogin={handleLogin}
+                            onSignup={handleSignup}
+                            switchMode={(mode) => setAuthMode(mode)}
+                        />
+                    )}
+                </div>
+            );
+        }
+
+        function AuthModal({ mode, onClose, onLogin, onSignup, switchMode }) {
+            const [showPassword, setShowPassword] = useState(false);
+            
+            return (
+                <div className="modal-overlay active" onClick={onClose}>
+                    <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>{mode === 'login' ? 'Welcome Back' : 'Join Eagle EdTech'}</h2>
+                            <button className="close-modal" onClick={onClose}>
+                                <i className="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
+                        <div className="modal-tabs">
+                            <button 
+                                className={`modal-tab ${mode === 'login' ? 'active' : ''}`}
+                                onClick={() => switchMode('login')}
+                            >
+                                Login
+                            </button>
+                            <button 
+                                className={`modal-tab ${mode === 'signup' ? 'active' : ''}`}
+                                onClick={() => switchMode('signup')}
+                            >
+                                Sign Up
+                            </button>
+                        </div>
+                        
+                        <div className="modal-content">
+                            {mode === 'login' ? (
+                                <form onSubmit={onLogin}>
+                                    <div className="form-group">
+                                        <label>Email Address</label>
+                                        <input 
+                                            type="email" 
+                                            name="email"
+                                            className="form-control" 
+                                            placeholder="your.email@example.com" 
+                                            required 
+                                        />
+                                    </div>
+                                    
+                                    <div className="form-group">
+                                        <label>Password</label>
+                                        <div className="password-input">
+                                            <input 
+                                                type={showPassword ? "text" : "password"}
+                                                name="password"
+                                                className="form-control" 
+                                                placeholder="Enter your password" 
+                                                required 
+                                            />
+                                            <button 
+                                                type="button"
+                                                className="toggle-password"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                            >
+                                                <i className={showPassword ? "far fa-eye-slash" : "far fa-eye"}></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" className="btn btn-primary" style={{width: '100%'}}>
+                                        <i className="fas fa-sign-in-alt"></i> Login to Your Account
+                                    </button>
+                                    
+                                    <div className="form-footer">
+                                        <p>Don't have an account? <a href="#" onClick={() => switchMode('signup')}>Sign up here</a></p>
+                                    </div>
+                                </form>
+                            ) : (
+                                <form onSubmit={onSignup}>
+                                    <div className="form-group">
+                                        <label>Full Name</label>
+                                        <input 
+                                            type="text" 
+                                            name="name"
+                                            className="form-control" 
+                                            placeholder="John Smith" 
+                                            required 
+                                        />
+                                    </div>
+                                    
+                                    <div className="form-group">
+                                        <label>Email Address</label>
+                                        <input 
+                                            type="email" 
+                                            name="email"
+                                            className="form-control" 
+                                            placeholder="your.email@example.com" 
+                                            required 
+                                        />
+                                    </div>
+                                    
+                                    <div className="form-group">
+                                        <label>Password</label>
+                                        <div className="password-input">
+                                            <input 
+                                                type={showPassword ? "text" : "password"}
+                                                name="password"
+                                                className="form-control" 
+                                                placeholder="Create a strong password" 
+                                                required 
+                                            />
+                                            <button 
+                                                type="button"
+                                                className="toggle-password"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                            >
+                                                <i className={showPassword ? "far fa-eye-slash" : "far fa-eye"}></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" className="btn btn-primary" style={{width: '100%'}}>
+                                        <i className="fas fa-user-plus"></i> Create Account
+                                    </button>
+                                    
+                                    <div className="form-footer">
+                                        <p>Already have an account? <a href="#" onClick={() => switchMode('login')}>Login here</a></p>
+                                    </div>
+                                </form>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // Initialize the app
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
